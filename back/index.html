@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고백 시나리오 생성기</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            box-sizing: border-box;
+            border-top: 5px solid #6c5ce7;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 25px;
+            background-color: #fdfdff;
+        }
+
+        .form-section h2 {
+            color: #6c5ce7;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: calc(100% - 20px);
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #6c5ce7;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            background-color: #6c5ce7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: 600;
+            margin-top: 30px;
+        }
+
+        button:hover {
+            background-color: #5a4bcf;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #result-section {
+            margin-top: 40px;
+            padding: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #fdfdff;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #777;
+            font-style: italic;
+        }
+
+        #result-section pre {
+            white-space: pre-wrap; /* 줄 바꿈 유지 */
+            word-wrap: break-word; /* 긴 단어 줄 바꿈 */
+            text-align: left;
+            width: 100%;
+            font-size: 1em;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px dashed #ddd;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #6c5ce7;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: none; /* 기본적으로 숨김 */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: #d9534f;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💖 고백 시나리오 생성기 (17세용) 💖</h1>
+
+        <form id="confessionForm">
+            <div class="form-section">
+                <h2>나의 정보</h2>
+                <div class="form-group">
+                    <label for="userName">내 이름:</label>
+                    <input type="text" id="userName" value="전유림" required>
+                </div>
+                <div class="form-group">
+                    <label for="userAge">나이:</label>
+                    <input type="number" id="userAge" value="17" min="15" max="19" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPersonality">성격 (쉼표로 구분):</label>
+                    <textarea id="userPersonality" required>외향적, 밝고 허당미 있음</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="userLikes">좋아하는 것 (쉼표로 구분):</label>
+                    <textarea id="userLikes" required>고양이, 노래 듣기, 한강 따라 산책, 맛있는 거 먹기, 바다, 치즈 케이크</textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>상대방 정보</h2>
+                <div class="form-group">
+                    <label for="crushName">상대 이름:</label>
+                    <input type="text" id="crushName" value="육준성" required>
+                </div>
+                <div class="form-group">
+                    <label for="crushAge">나이:</label>
+                    <input type="number" id="crushAge" value="17" min="15" max="19" required>
+                </div>
+                <div class="form-group">
+                    <label for="crushPersonality">성격 (쉼표로 구분):</label>
+                    <textarea id="crushPersonality" required>무뚝뚝하지만 나에겐 다정함, 따뜻하고 똑똑함</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="crushLikes">좋아하는 것 (쉼표로 구분):</label>
+                    <textarea id="crushLikes" required>스포츠, 피아노, 조용한 카페에서 작업하기, 귀여운 동물, 티라미수, 태권도</textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>고백 정보</h2>
+                <div class="form-group">
+                    <label for="sumPeriod">썸 탄 기간:</label>
+                    <input type="text" id="sumPeriod" value="2주" required>
+                </div>
+                <div class="form-group">
+                    <label for="confessionMethod">고백 방식:</label>
+                    <select id="confessionMethod" required>
+                        <option value="만나서 직접">만나서 직접</option>
+                        <option value="메시지">메시지</option>
+                        <option value="전화">전화</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" id="generateButton">시나리오 생성하기</button>
+            <div class="loading-spinner" id="loadingSpinner"></div>
+            <div class="error-message" id="errorMessage"></div>
+        </form>
+
+        <div id="result-section">
+            <p>시나리오가 여기에 표시됩니다.</p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('confessionForm');
+        const generateButton = document.getElementById('generateButton');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const errorMessage = document.getElementById('errorMessage');
+        const resultSection = document.getElementById('result-section');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // 폼 제출의 기본 동작 방지
+
+            // 로딩 스피너 표시 및 버튼 비활성화
+            generateButton.disabled = true;
+            loadingSpinner.style.display = 'block';
+            errorMessage.textContent = ''; // 이전 오류 메시지 초기화
+            resultSection.innerHTML = '<p>시나리오를 생성 중입니다...</p>'; // 결과 영역 초기화
+
+            const userData = {
+                userName: document.getElementById('userName').value,
+                userAge: parseInt(document.getElementById('userAge').value),
+                userPersonality: document.getElementById('userPersonality').value.split(',').map(s => s.trim()).filter(s => s),
+                userLikes: document.getElementById('userLikes').value.split(',').map(s => s.trim()).filter(s => s),
+                crushName: document.getElementById('crushName').value,
+                crushAge: parseInt(document.getElementById('crushAge').value),
+                crushPersonality: document.getElementById('crushPersonality').value.split(',').map(s => s.trim()).filter(s => s),
+                crushLikes: document.getElementById('crushLikes').value.split(',').map(s => s.trim()).filter(s => s),
+                sumPeriod: document.getElementById('sumPeriod').value,
+                confessionMethod: document.getElementById('confessionMethod').value
+            };
+
+            const requestBody = {
+                user_info: {
+                    name: userData.userName,
+                    age: userData.userAge,
+                    personality: userData.userPersonality.join(', '), // 문자열로 다시 결합
+                    likes: userData.userLikes
+                },
+                crush_info: {
+                    name: userData.crushName,
+                    age: userData.crushAge,
+                    personality: userData.crushPersonality.join(', '), // 문자열로 다시 결합
+                    likes: userData.crushLikes
+                },
+                sum_period: userData.sumPeriod,
+                confession_method: userData.confessionMethod
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/generate-confession', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || `HTTP 오류: ${response.status}`);
+                }
+
+                const data = await response.json();
+                // 시나리오 텍스트를 <pre> 태그로 감싸서 표시하여 줄 바꿈 등을 유지
+                resultSection.innerHTML = `<pre>${data.scenario}</pre>`;
+
+            } catch (error) {
+                console.error('Fetch 오류:', error);
+                errorMessage.textContent = `오류 발생: ${error.message}`;
+                resultSection.innerHTML = '<p>시나리오를 불러오는 데 실패했습니다.</p>';
+            } finally {
+                // 로딩 스피너 숨김 및 버튼 활성화
+                loadingSpinner.style.display = 'none';
+                generateButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
